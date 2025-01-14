@@ -6,10 +6,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main{
-    static int n;
-    static int m;
-    static int[][] tomato;
+public class Main {
+    static int m, n;
+    static int[][] arr;
     static int[] dx = {-1, 1, 0, 0};
     static int[] dy = {0, 0, -1, 1};
 
@@ -20,23 +19,25 @@ public class Main{
         m = Integer.parseInt(st.nextToken());
         n = Integer.parseInt(st.nextToken());
 
-        tomato = new int[n][m];
+        arr = new int[n][m];
         Queue<int[]> queue = new LinkedList<>();
-        int initialZeroCount = 0;
+
+        int initialCount = 0;
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
-                tomato[i][j] = Integer.parseInt(st.nextToken());
-                if (tomato[i][j] == 1) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
+                if (arr[i][j] == 1) {
                     queue.offer(new int[]{i, j});
-                } else if (tomato[i][j] == 0) {
-                    initialZeroCount++;
+                }
+                if(arr[i][j] == 0) {
+                    initialCount++;
                 }
             }
         }
 
-        if (initialZeroCount == 0) {
+        if (initialCount == 0) {
             System.out.println(0);
             return;
         }
@@ -45,7 +46,7 @@ public class Main{
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (tomato[i][j] == 0) {
+                if (arr[i][j] == 0) {
                     System.out.println(-1);
                     return;
                 }
@@ -55,8 +56,8 @@ public class Main{
         System.out.println(result);
     }
 
-    public static int bfs(Queue<int[]> queue) {
-        int maxDays = 0;
+    static int bfs(Queue<int[]> queue) {
+        int maxDay = 0;
 
         while (!queue.isEmpty()) {
             int[] current = queue.poll();
@@ -66,17 +67,15 @@ public class Main{
             for (int i = 0; i < 4; i++) {
                 int nx = cx + dx[i];
                 int ny = cy + dy[i];
-
                 if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
-                    if (tomato[nx][ny] == 0) {
-                        tomato[nx][ny] = tomato[cx][cy] + 1;
-                        maxDays = Math.max(maxDays, tomato[nx][ny]);
+                    if (arr[nx][ny] == 0) {
+                        arr[nx][ny] = arr[cx][cy] + 1;
+                        maxDay = Math.max(maxDay, arr[nx][ny]);
                         queue.offer(new int[]{nx, ny});
                     }
                 }
             }
         }
-
-        return maxDays - 1;
+        return maxDay - 1;
     }
 }
